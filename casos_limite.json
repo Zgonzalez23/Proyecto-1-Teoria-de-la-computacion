@@ -1,0 +1,27 @@
+[
+  {
+    "entrada": "WHEN temperatura > 28 THEN encender_ventilador; WHEN humedad < 40 THEN activar_humidificador;",
+    "esperado": "valido",
+    "desc": "Límite: múltiples reglas en una sola entrada (programa recursivo)"
+  },
+  {
+    "entrada": "WHEN NOT NOT movimiento == TRUE THEN apagar_luces;",
+    "esperado": "valido",
+    "desc": "Límite: NOT anidado (recursividad en <comparacion>)"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 AND humedad < 40 AND aire < 20 THEN encender_ventilador;",
+    "esperado": "valido",
+    "desc": "Límite: cadena de 3 condiciones con AND"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 THEN encender_ventilador, abrir_ventana, subir_persiana;",
+    "esperado": "valido",
+    "desc": "Límite: 3 acciones separadas por coma"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 AND THEN encender_ventilador;",
+    "esperado": "invalido",
+    "desc": "Límite: AND colgando sin segunda condición"
+  }
+]

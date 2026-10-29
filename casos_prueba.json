@@ -1,0 +1,102 @@
+[
+  {
+    "entrada": "WHEN temperatura > 28 THEN encender_ventilador;",
+    "esperado": "valido",
+    "desc": "Condición simple > (básica)"
+  },
+  {
+    "entrada": "WHEN movimiento == TRUE THEN activar_alarma;",
+    "esperado": "valido",
+    "desc": "Condición booleana == TRUE"
+  },
+  {
+    "entrada": "WHEN humedad < 40 THEN activar_humidificador;",
+    "esperado": "valido",
+    "desc": "Condición simple <"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 AND humedad < 40 THEN encender_ventilador;",
+    "esperado": "valido",
+    "desc": "Compuesta con AND (extensión condicional)"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 OR humedad > 80 THEN encender_aire;",
+    "esperado": "valido",
+    "desc": "Compuesta con OR (extensión condicional)"
+  },
+  {
+    "entrada": "WHEN NOT movimiento == TRUE THEN apagar_luces;",
+    "esperado": "valido",
+    "desc": "NOT sobre comparación (extensión NOT)"
+  },
+  {
+    "entrada": "WHEN NOT humedad < 40 THEN activar_deshumidificador;",
+    "esperado": "valido",
+    "desc": "NOT sobre < (extensión NOT)"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 THEN encender_ventilador, abrir_ventana;",
+    "esperado": "valido",
+    "desc": "Múltiples acciones con coma (extensión acciones)"
+  },
+  {
+    "entrada": "WHEN NOT alarma == TRUE THEN desactivar_sirena, enviar_notificacion;",
+    "esperado": "valido",
+    "desc": "NOT + múltiples acciones (extensión combinada)"
+  },
+  {
+    "entrada": "WHEN NOT movimiento == TRUE AND temperatura < 18 THEN encender_calefaccion;",
+    "esperado": "valido",
+    "desc": "NOT + AND compuesto (extensión completa)"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 THEN ;",
+    "esperado": "invalido",
+    "desc": "Falta acción después de THEN"
+  },
+  {
+    "entrada": "WHEN NOT THEN encender_luces;",
+    "esperado": "invalido",
+    "desc": "Falta condición tras NOT"
+  },
+  {
+    "entrada": "temperatura > 28 THEN encender_ventilador;",
+    "esperado": "invalido",
+    "desc": "Falta palabra reservada WHEN"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 THEN encender_ventilador",
+    "esperado": "invalido",
+    "desc": "Falta punto y coma final"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 THEN encender_ventilador,",
+    "esperado": "invalido",
+    "desc": "Coma final sin segunda acción"
+  },
+  {
+    "entrada": "WHEN NOT > 28 THEN encender_luces;",
+    "esperado": "invalido",
+    "desc": "NOT seguido de operador relacional (no es factor)"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 THEN encender_ventilador abrir_ventana;",
+    "esperado": "invalido",
+    "desc": "Falta coma entre acciones"
+  },
+  {
+    "entrada": "WHEN temperatura > 28 THEN 123;",
+    "esperado": "invalido",
+    "desc": "Acción no es identificador (es NUM)"
+  },
+  {
+    "entrada": "WHEN movimiento == THEN encender_luces;",
+    "esperado": "invalido",
+    "desc": "Falta valor tras operador relacional =="
+  },
+  {
+    "entrada": "WHEN THEN encender_luces;",
+    "esperado": "invalido",
+    "desc": "Falta condición completa"
+  }
+]

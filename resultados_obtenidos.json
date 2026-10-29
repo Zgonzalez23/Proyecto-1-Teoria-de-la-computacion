@@ -1,0 +1,210 @@
+{
+  "total": 25,
+  "pasados": 25,
+  "fallos": 0,
+  "validos_esperados": 14,
+  "invalidos_esperados": 11,
+  "todos_pasan": true,
+  "resultados": [
+    {
+      "entrada": "WHEN temperatura > 28 THEN encender_ventilador;",
+      "descripcion": "Condición simple > (básica)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN movimiento == TRUE THEN activar_alarma;",
+      "descripcion": "Condición booleana == TRUE",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN humedad < 40 THEN activar_humidificador;",
+      "descripcion": "Condición simple <",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 AND humedad < 40 THEN encender_ventilador;",
+      "descripcion": "Compuesta con AND (extensión condicional)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 OR humedad > 80 THEN encender_aire;",
+      "descripcion": "Compuesta con OR (extensión condicional)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN NOT movimiento == TRUE THEN apagar_luces;",
+      "descripcion": "NOT sobre comparación (extensión NOT)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN NOT humedad < 40 THEN activar_deshumidificador;",
+      "descripcion": "NOT sobre < (extensión NOT)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 THEN encender_ventilador, abrir_ventana;",
+      "descripcion": "Múltiples acciones con coma (extensión acciones)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN NOT alarma == TRUE THEN desactivar_sirena, enviar_notificacion;",
+      "descripcion": "NOT + múltiples acciones (extensión combinada)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN NOT movimiento == TRUE AND temperatura < 18 THEN encender_calefaccion;",
+      "descripcion": "NOT + AND compuesto (extensión completa)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 THEN ;",
+      "descripcion": "Falta acción después de THEN",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN NOT THEN encender_luces;",
+      "descripcion": "Falta condición tras NOT",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "temperatura > 28 THEN encender_ventilador;",
+      "descripcion": "Falta palabra reservada WHEN",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 THEN encender_ventilador",
+      "descripcion": "Falta punto y coma final",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 THEN encender_ventilador,",
+      "descripcion": "Coma final sin segunda acción",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN NOT > 28 THEN encender_luces;",
+      "descripcion": "NOT seguido de operador relacional (no es factor)",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 THEN encender_ventilador abrir_ventana;",
+      "descripcion": "Falta coma entre acciones",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 THEN 123;",
+      "descripcion": "Acción no es identificador (es NUM)",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN movimiento == THEN encender_luces;",
+      "descripcion": "Falta valor tras operador relacional ==",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN THEN encender_luces;",
+      "descripcion": "Falta condición completa",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 THEN encender_ventilador; WHEN humedad < 40 THEN activar_humidificador;",
+      "descripcion": "Límite: múltiples reglas en una sola entrada (programa recursivo)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN NOT NOT movimiento == TRUE THEN apagar_luces;",
+      "descripcion": "Límite: NOT anidado (recursividad en <comparacion>)",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 AND humedad < 40 AND aire < 20 THEN encender_ventilador;",
+      "descripcion": "Límite: cadena de 3 condiciones con AND",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 THEN encender_ventilador, abrir_ventana, subir_persiana;",
+      "descripcion": "Límite: 3 acciones separadas por coma",
+      "esperado": "valido",
+      "obtenido": "valido",
+      "mensaje_parser": "Sintaxis válida (LL(1) por descenso recursivo)",
+      "coincidio": true
+    },
+    {
+      "entrada": "WHEN temperatura > 28 AND THEN encender_ventilador;",
+      "descripcion": "Límite: AND colgando sin segunda condición",
+      "esperado": "invalido",
+      "obtenido": "invalido",
+      "mensaje_parser": "Error de sintaxis",
+      "coincidio": true
+    }
+  ]
+}
