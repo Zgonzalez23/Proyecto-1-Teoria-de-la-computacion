@@ -13,7 +13,7 @@
 Se consideran los siguientes caracteres permitidos:
 - Letras: `A-Z`, `a-z`
 - Dígitos: `0-9`
-- Símbolos: `>`, `<`, `=`, `!`, `;`, `,`, `(`, `)`, espacio, tabulador, salto de línea
+- Símbolos: `>`, `<`, `=`, `!`, `;`, `,`, espacio, tabulador, salto de línea
 - Guion bajo: `_`
 
 ### Palabras reservadas (mínimo 4)
@@ -50,10 +50,8 @@ Se consideran los siguientes caracteres permitidos:
 | `OP_REL` | OPERADOR RELACIONAL | `>= \| <= \| == \| != \| > \| <` |
 | `PUNTO_COMA` | SEPARADOR | `;` |
 | `COMA` | SEPARADOR (Extensión) | `,` |
-| `PARENT_IZQ` | SEPARADOR | `\(` |
-| `PARENT_DER` | SEPARADOR | `\)` |
+| `EOF` | FIN DE ENTRADA | `$` |
 | `ESPACIO` | IGNORAR | `[ \t\n]+` |
-| `ERROR` | ERROR | `.` |
 
 ## F3. Ejemplos válidos e inválidos
 

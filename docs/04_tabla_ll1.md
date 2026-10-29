@@ -15,7 +15,7 @@ Para cada producción $A \rightarrow \alpha$:
 | `<programa> → <regla> <programa>'` | $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$ | No | $FOLLOW(\texttt{<programa>}) = \{\$\}$ | $M[\texttt{<programa>}, \texttt{WHEN}] = \texttt{<programa>} \rightarrow \texttt{<regla> <programa>'}$ |
 | `<programa>' → <regla> <programa>'` | $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$ | No | $FOLLOW(\texttt{<programa>'}) = \{\$\}$ | $M[\texttt{<programa>'}, \texttt{WHEN}] = \texttt{<programa>'} \rightarrow \texttt{<regla> <programa>'}$ |
 | `<programa>' → ε` | $\{\epsilon\}$ | Sí | $FOLLOW(\texttt{<programa>'}) = \{\$\}$ | $M[\texttt{<programa>'}, \$] = \texttt{<programa>'} \rightarrow \epsilon$ |
-| `<regla> → WHEN <condicion> THEN <acciones> ;` | $FIRST(\texttt{WHEN}) = \{\texttt{WHEN}\}$ | No | $FOLLOW(\texttt{<regla>}) = \{\$\}$ | $M[\texttt{<regla>}, \texttt{WHEN}] = \texttt{<regla>} \rightarrow \texttt{WHEN <condicion> THEN <acciones> ;}$ |
+| `<regla> → WHEN <condicion> THEN <acciones> ;` | $FIRST(\texttt{WHEN}) = \{\texttt{WHEN}\}$ | No | $FOLLOW(\texttt{<regla>}) = \{\texttt{WHEN}, \$\}$ | $M[\texttt{<regla>}, \texttt{WHEN}] = \texttt{<regla>} \rightarrow \texttt{WHEN <condicion> THEN <acciones> ;}$ |
 | `<condicion> → <comparacion> <condicion_tail>` | $FIRST(\texttt{<comparacion>}) = \{\texttt{NOT}, \texttt{ID}, \texttt{NUM}, \texttt{TRUE}, \texttt{FALSE}\}$ | No | $FOLLOW(\texttt{<condicion>}) = \{\texttt{THEN}\}$ | $M[\texttt{<condicion>}, \texttt{NOT}], M[\texttt{<condicion>}, \texttt{ID}], M[\texttt{<condicion>}, \texttt{NUM}], M[\texttt{<condicion>}, \texttt{TRUE}], M[\texttt{<condicion>}, \texttt{FALSE}]$ |
 | `<condicion_tail> → AND <comparacion> <condicion_tail>` | $\{\texttt{AND}\}$ | No | $FOLLOW(\texttt{<condicion_tail>}) = \{\texttt{THEN}\}$ | $M[\texttt{<condicion_tail>}, \texttt{AND}] = \texttt{<condicion_tail>} \rightarrow \texttt{AND <comparacion> <condicion_tail>}$ |
 | `<condicion_tail> → OR <comparacion> <condicion_tail>` | $\{\texttt{OR}\}$ | No | $FOLLOW(\texttt{<condicion_tail>}) = \{\texttt{THEN}\}$ | $M[\texttt{<condicion_tail>}, \texttt{OR}] = \texttt{<condicion_tail>} \rightarrow \texttt{OR <comparacion> <condicion_tail>}$ |
@@ -46,7 +46,7 @@ Para cada producción $A \rightarrow \alpha$:
 | `<comparacion>, NOT` | `<comparacion> → NOT <comparacion>` | No | Única producción. |
 | `<comparacion>, ID/NUM/TRUE/FALSE` | `<comparacion> → <factor_cond> <op_rel> <factor_cond>` | No | Única producción. |
 | `<factor_cond>, ID/NUM/TRUE/FALSE` | Correspondiente a cada caso | No | Única producción por FIRST. |
-| `<op_rel>, >/<//==/!=/<=/>=` | Correspondiente a cada caso | No | Única producción por FIRST. |
+| `<op_rel>, > / < / == / != / <= / >=` | Correspondiente a cada caso | No | Única producción por FIRST. |
 | `<acciones>, ID` | `<acciones> → <accion> <acciones_tail>` | No | Única producción. |
 | `<acciones_tail>, ,` | `<acciones_tail> → , <accion> <acciones_tail>` | No | Única producción. |
 | `<acciones_tail>, ;` | `<acciones_tail> → ε` | No | Única producción por FOLLOW. |

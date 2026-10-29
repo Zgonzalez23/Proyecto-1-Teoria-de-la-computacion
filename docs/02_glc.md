@@ -39,47 +39,34 @@
 ```
 La derivación es válida, por lo que la gramática inicial es correcta para los ejemplos propuestos.
 
-## F5. Eliminación de recursión izquierda
+## F5. Análisis de recursión izquierda
 
-### Recursión izquierda detectada
-| No terminal | Tipo (directa/indirecta) | Producción(es) con recursión | Observaciones |
+### Análisis de recursión izquierda
+Una producción presenta recursión izquierda directa si es de la forma $A \rightarrow A\alpha$, donde el no terminal de la cabecera aparece como el primer símbolo del cuerpo de la producción. La recursión izquierda es problemática para analizadores predictivos descendentes como LL(1), ya que produce bucles infinitos.
+
+| No terminal | Tipo (directa/indirecta) | Producción(es) analizadas | Observaciones |
 |---|---|---|---|
-| `<comparacion>` | Directa | `<comparacion> → NOT <comparacion> \| <factor_cond> <op_rel> <factor_cond>` | Tiene recursión izquierda directa por la producción `<comparacion> → NOT <comparacion>`. |
-| `<condicion_tail>` | No presenta recursión izquierda | `<condicion_tail> → AND <comparacion> <condicion_tail> \| OR <comparacion> <condicion_tail> \| ε` | Es recursiva por la derecha. No es recursión izquierda. |
-| `<acciones_tail>` | No presenta recursión izquierda | `<acciones_tail> → , <accion> <acciones_tail> \| ε` | Es recursiva por la derecha. No es recursión izquierda. |
-| `<programa>` | No presenta recursión izquierda | `<programa> → <regla> <programa> \| <regla>` | Es recursiva por la derecha. No es recursión izquierda. |
+| `<programa>` | No presenta | `<programa> → <regla> <programa> \| <regla>` | El primer símbolo es `<regla>`, no `<programa>`. Presenta recursión derecha y requiere factorización por la izquierda (ver F6), pero no tiene recursión izquierda. |
+| `<comparacion>` | No presenta | `<comparacion> → NOT <comparacion> \| <factor_cond> <op_rel> <factor_cond>` | La producción `<comparacion> → NOT <comparacion>` inicia con el terminal `NOT`. Se trata de **recursión derecha / operador prefijo**, no de recursión izquierda. La segunda alternativa inicia con `<factor_cond>`. |
+| `<condicion_tail>` | No presenta | `<condicion_tail> → AND <comparacion> <condicion_tail> \| OR <comparacion> <condicion_tail> \| ε` | Inician con terminales `AND`, `OR` o $\epsilon$. Es recursiva por la derecha. |
+| `<acciones_tail>` | No presenta | `<acciones_tail> → , <accion> <acciones_tail> \| ε` | Inicia con el separador `,` o $\epsilon$. Es recursiva por la derecha. |
+| Resto de NTs | No presenta | `<regla>`, `<condicion>`, `<factor_cond>`, `<op_rel>`, `<acciones>`, `<accion>` | Sus cuerpos inician con terminales u otros no terminales sin ciclos recursivos indirectos. |
 
-### Eliminación aplicada
-**Antes:**
-```bnf
-<comparacion>   → NOT <comparacion> | <factor_cond> <op_rel> <factor_cond>
-```
+### Conclusión F5
+Tras revisar exhaustivamente todas las producciones directas y las posibles cadenas de derivación indirecta, **se concluye que la gramática inicial no posee recursión izquierda (ni directa ni indirecta)**. Por lo tanto, no se requiere aplicar el algoritmo de transformación de eliminación de recursión izquierda ($A \rightarrow A\alpha \mid \beta \implies A \rightarrow \beta A', A' \rightarrow \alpha A' \mid \epsilon$). 
 
-**Después (con nuevos no terminales):**
-```bnf
-<comparacion>     → NOT <comparacion> <comparacion'>
-<comparacion'>    → NOT <comparacion> <comparacion'> | ε
-<comparacion>     → <factor_cond> <op_rel> <factor_cond>
-```
-O de forma equivalente y más limpia para mantener el lenguaje:
-```bnf
-<comparacion>   → NOT <comparacion> | <factor_cond> <op_rel> <factor_cond>
-```
-**Nota:** Para `A → Aα | β` con α = `NOT` y β = `<factor_cond> <op_rel> <factor_cond>`, aplicando la transformación:
-- `A = <comparacion>`, `α = NOT`, `β = <factor_cond> <op_rel> <factor_cond>`
-- Queda: `<comparacion> → <factor_cond> <op_rel> <factor_cond> <comparacion>'`
-- `<comparacion>' → NOT <comparacion>' | ε`
-
-Sin embargo, en este caso particular, para mantener la semántica del NOT unario (puede aplicarse una vez como prefijo a una comparación), la forma más simple y LL(1)-compatible es mantener `NOT <comparacion>` como alternativa, pero al factorizarlas correctamente se evita el conflicto. Tras factorización por la izquierda en F6, se reestructura para garantizar análisis LL(1).
-
-**Justificación / Verificación:** Se identifica recursión izquierda directa en `<comparacion>`. Se aplicará la eliminación junto con factorización en F6 para obtener una gramática sin recursión izquierda y factorizada, preservando el lenguaje de los ejemplos válidos.
+La estructura requiere únicamente factorización por la izquierda en `<programa>` para eliminar el prefijo común `<regla>`, lo cual se resuelve en la sección F6.
 
 ## F6. Factorización izquierda y ambigüedades
 
 ### Factorización izquierda
+La factorización por la izquierda se aplica cuando dos o más alternativas para un no terminal comparten un prefijo común (es decir, $A \rightarrow \alpha\beta_1 \mid \alpha\beta_2$). Esto genera conflicto en LL(1) porque al ver un token perteneciente a $FIRST(\alpha)$ el parser no sabría cuál alternativa elegir sin adelantarse.
+
 | No terminal | Prefijos comunes | Factorización aplicada (antes/después) | Resultado |
 |---|---|---|---|
-| `<comparacion>` | Prefijo común `NOT` con recursión. También se necesita distinguir entre `NOT <comparacion>` y `<factor_cond> <op_rel> <factor_cond>`. | **Antes:** `<comparacion> → NOT <comparacion> \| <factor_cond> <op_rel> <factor_cond>` **Después:** Se reestructura para evitar recursión izquierda: `<comparacion> → NOT <comparacion>' \| <factor_cond> <op_rel> <factor_cond>` con `<comparacion>' → <comparacion>` o se aplica eliminación directa resultando en `<comparacion> → NOT <comparacion> \| <factor_cond> <op_rel> <factor_cond>` factorizado correctamente. Finalmente se obtiene: `<comparacion> → NOT <comparacion> \| <factor_cond> <op_rel> <factor_cond>` que al calcular FIRST/FOLLOW con la regla correcta resulta LL(1). | Se elimina recursión izquierda directa y se prepara para análisis LL(1). |
+| `<programa>` | Prefijo común `<regla>` | **Antes:**<br>`<programa> → <regla> <programa> \| <regla>`<br><br>**Después:**<br>`<programa> → <regla> <programa>'`<br>`<programa'> → <regla> <programa>' \| ε` | Se extrae el prefijo común `<regla>` introduciendo el nuevo no terminal `<programa'>`. Permite análisis predictivo LL(1) determinista. |
+| `<comparacion>` | Ninguno | Las alternativas son `NOT <comparacion>` y `<factor_cond> <op_rel> <factor_cond>`. Sus primeros símbolos son disjuntos: $FIRST(\text{rama 1}) = \{\texttt{NOT}\}$ y $FIRST(\text{rama 2}) = \{\texttt{ID}, \texttt{NUM}, \texttt{TRUE}, \texttt{FALSE}\}$. | No requiere factorización. Ambas opciones se distinguen inmediatamente con un lookahead de 1 token. |
+| Demás no terminales | Ninguno | `<condicion_tail>` inicia con `AND`, `OR` o $\epsilon$; `<acciones_tail>` inicia con `,` o $\epsilon$. | No presentan prefijos comunes compartidos entre alternativas. |
 
 ### Ambigüedades detectadas
 | Caso (expresión/estructura) | ¿Ambigua? (Sí/No) | Razón | Solución aplicada (precedencia/asociatividad/reestructuración) |
@@ -104,4 +91,4 @@ Sin embargo, en este caso particular, para mantener la semántica del NOT unario
 ```
 **Símbolo inicial:** `<programa>`
 
-**Observación:** La gramática ha sido factorizada y analizada para evitar recursión izquierda. Se integra la extensión creativa propuesta por Martín González (Operador NOT y Múltiples Acciones) tal como se especifica en `Tarea T1 Martin Gonzalez.pdf`.
+**Observación:** La gramática ha sido factorizada por la izquierda en `<programa>` y se verificó la ausencia de recursión izquierda. Se integra la extensión creativa propuesta por Martín González (Operador NOT y Múltiples Acciones) tal como se especifica en `Tarea T1 Martin Gonzalez.pdf`.
