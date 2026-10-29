@@ -91,7 +91,7 @@
       "descripcion": "Falta acción después de THEN",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <acciones> | encontrado='PUNTO_COMA (;)' | esperado='ID' | posición=L1:C28 | sugerencia: según la tabla LL(1) se esperaba: ID",
       "coincidio": true
     },
     {
@@ -99,7 +99,7 @@
       "descripcion": "Falta condición tras NOT",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <comparacion> | encontrado='THEN (THEN)' | esperado='FALSE, ID, NOT, NUM, TRUE' | posición=L1:C10 | sugerencia: según la tabla LL(1) se esperaba: FALSE, ID, NOT, NUM, TRUE",
       "coincidio": true
     },
     {
@@ -107,7 +107,7 @@
       "descripcion": "Falta palabra reservada WHEN",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <programa> | encontrado='ID (temperatura)' | esperado='WHEN' | posición=L1:C1 | sugerencia: según la tabla LL(1) se esperaba: WHEN",
       "coincidio": true
     },
     {
@@ -115,7 +115,7 @@
       "descripcion": "Falta punto y coma final",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <acciones_tail> | encontrado='EOF ($)' | esperado='COMA, PUNTO_COMA' | posición=L1:C47 | sugerencia: según la tabla LL(1) se esperaba: COMA, PUNTO_COMA",
       "coincidio": true
     },
     {
@@ -123,7 +123,7 @@
       "descripcion": "Coma final sin segunda acción",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <accion> | encontrado='EOF ($)' | esperado='ID' | posición=L1:C48 | sugerencia: según la tabla LL(1) se esperaba: ID",
       "coincidio": true
     },
     {
@@ -131,7 +131,7 @@
       "descripcion": "NOT seguido de operador relacional (no es factor)",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <comparacion> | encontrado='OP_REL (>)' | esperado='FALSE, ID, NOT, NUM, TRUE' | posición=L1:C10 | sugerencia: según la tabla LL(1) se esperaba: FALSE, ID, NOT, NUM, TRUE",
       "coincidio": true
     },
     {
@@ -139,7 +139,7 @@
       "descripcion": "Falta coma entre acciones",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <acciones_tail> | encontrado='ID (abrir_ventana)' | esperado='COMA, PUNTO_COMA' | posición=L1:C48 | sugerencia: según la tabla LL(1) se esperaba: COMA, PUNTO_COMA",
       "coincidio": true
     },
     {
@@ -147,7 +147,7 @@
       "descripcion": "Acción no es identificador (es NUM)",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <acciones> | encontrado='NUM (123)' | esperado='ID' | posición=L1:C28 | sugerencia: según la tabla LL(1) se esperaba: ID",
       "coincidio": true
     },
     {
@@ -155,7 +155,7 @@
       "descripcion": "Falta valor tras operador relacional ==",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <factor_cond> | encontrado='THEN (THEN)' | esperado='FALSE, ID, NUM, TRUE' | posición=L1:C20 | sugerencia: según la tabla LL(1) se esperaba: FALSE, ID, NUM, TRUE",
       "coincidio": true
     },
     {
@@ -163,7 +163,7 @@
       "descripcion": "Falta condición completa",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <condicion> | encontrado='THEN (THEN)' | esperado='FALSE, ID, NOT, NUM, TRUE' | posición=L1:C6 | sugerencia: según la tabla LL(1) se esperaba: FALSE, ID, NOT, NUM, TRUE",
       "coincidio": true
     },
     {
@@ -203,7 +203,7 @@
       "descripcion": "Límite: AND colgando sin segunda condición",
       "esperado": "invalido",
       "obtenido": "invalido",
-      "mensaje_parser": "Error de sintaxis",
+      "mensaje_parser": "Error sintáctico: No hay producción para <comparacion> | encontrado='THEN (THEN)' | esperado='FALSE, ID, NOT, NUM, TRUE' | posición=L1:C27 | sugerencia: según la tabla LL(1) se esperaba: FALSE, ID, NOT, NUM, TRUE",
       "coincidio": true
     }
   ]
