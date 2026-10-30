@@ -12,9 +12,9 @@ Para cada producción $A \rightarrow \alpha$:
 
 | Producción | FIRST(α) | ¿Contiene ε? | FOLLOW(A) | Entradas en tabla |
 |---|---|---|---|---|
-| `<programa> → <regla> <programa>'` | $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$ | No | $FOLLOW(\texttt{<programa>}) = \{\$\}$ | $M[\texttt{<programa>}, \texttt{WHEN}] = \texttt{<programa>} \rightarrow \texttt{<regla> <programa>'}$ |
-| `<programa>' → <regla> <programa>'` | $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$ | No | $FOLLOW(\texttt{<programa>'}) = \{\$\}$ | $M[\texttt{<programa>'}, \texttt{WHEN}] = \texttt{<programa>'} \rightarrow \texttt{<regla> <programa>'}$ |
-| `<programa>' → ε` | $\{\epsilon\}$ | Sí | $FOLLOW(\texttt{<programa>'}) = \{\$\}$ | $M[\texttt{<programa>'}, \$] = \texttt{<programa>'} \rightarrow \epsilon$ |
+| `<programa> → <regla> <programa'>` | $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$ | No | $FOLLOW(\texttt{<programa>}) = \{\$\}$ | $M[\texttt{<programa>}, \texttt{WHEN}] = \texttt{<programa>} \rightarrow \texttt{<regla> <programa'>}$ |
+| `<programa'> → <regla> <programa'>` | $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$ | No | $FOLLOW(\texttt{<programa'>}) = \{\$\}$ | $M[\texttt{<programa'>}, \texttt{WHEN}] = \texttt{<programa'>} \rightarrow \texttt{<regla> <programa'>}$ |
+| `<programa'> → ε` | $\{\epsilon\}$ | Sí | $FOLLOW(\texttt{<programa'>}) = \{\$\}$ | $M[\texttt{<programa'>}, \$] = \texttt{<programa'>} \rightarrow \epsilon$ |
 | `<regla> → WHEN <condicion> THEN <acciones> ;` | $FIRST(\texttt{WHEN}) = \{\texttt{WHEN}\}$ | No | $FOLLOW(\texttt{<regla>}) = \{\texttt{WHEN}, \$\}$ | $M[\texttt{<regla>}, \texttt{WHEN}] = \texttt{<regla>} \rightarrow \texttt{WHEN <condicion> THEN <acciones> ;}$ |
 | `<condicion> → <comparacion> <condicion_tail>` | $FIRST(\texttt{<comparacion>}) = \{\texttt{NOT}, \texttt{ID}, \texttt{NUM}, \texttt{TRUE}, \texttt{FALSE}\}$ | No | $FOLLOW(\texttt{<condicion>}) = \{\texttt{THEN}\}$ | $M[\texttt{<condicion>}, \texttt{NOT}], M[\texttt{<condicion>}, \texttt{ID}], M[\texttt{<condicion>}, \texttt{NUM}], M[\texttt{<condicion>}, \texttt{TRUE}], M[\texttt{<condicion>}, \texttt{FALSE}]$ |
 | `<condicion_tail> → AND <comparacion> <condicion_tail>` | $\{\texttt{AND}\}$ | No | $FOLLOW(\texttt{<condicion_tail>}) = \{\texttt{THEN}\}$ | $M[\texttt{<condicion_tail>}, \texttt{AND}] = \texttt{<condicion_tail>} \rightarrow \texttt{AND <comparacion> <condicion_tail>}$ |
@@ -29,15 +29,17 @@ Para cada producción $A \rightarrow \alpha$:
 | `<acciones_tail> → ε` | $\{\epsilon\}$ | Sí | $FOLLOW(\texttt{<acciones_tail>}) = \{;\}$ | $M[\texttt{<acciones_tail>}, ;] = \texttt{<acciones_tail>} \rightarrow \epsilon$ |
 | `<accion> → ID` | $\{\texttt{ID}\}$ | No | $FOLLOW(\texttt{<accion>}) = \{,, ;\}$ | $M[\texttt{<accion>}, \texttt{ID}] = \texttt{<accion>} \rightarrow \texttt{ID}$ |
 
+**Nota de implementación:** esta tabla usa la notación formal (`;`, `,`, `$` y un renglón por operador relacional). En `test_runner.py` los seis operadores se agrupan bajo el token `OP_REL`, y `;`, `,`, `$` se llaman `PUNTO_COMA`, `COMA` y `EOF`. Por eso la tabla del código tiene 26 claves, equivalentes a las 31 entradas de esta tabla. La correspondencia completa está en `docs/01_definicion_dsl.md`.
+
 ## F10. Verificación de ausencia de conflictos o justificación de solución
 
 ### Verificación celda por celda
 | Combinación (NT, Terminal) | Producción(es) | ¿Conflicto? (Sí/No) | Observación |
 |---|---|---|---|
-| `<programa>, WHEN` | `<programa> → <regla> <programa>'` | No | Única producción. |
+| `<programa>, WHEN` | `<programa> → <regla> <programa'>` | No | Única producción. |
 | `<programa>, $` | (vacía) | No | Sin producción. |
-| `<programa>', WHEN` | `<programa>' → <regla> <programa>'` | No | Única producción. |
-| `<programa>', $` | `<programa>' → ε` | No | Única producción (gracias a FOLLOW). |
+| `<programa'>, WHEN` | `<programa'> → <regla> <programa'>` | No | Única producción. |
+| `<programa'>, $` | `<programa'> → ε` | No | Única producción (gracias a FOLLOW). |
 | `<regla>, WHEN` | `<regla> → WHEN <condicion> THEN <acciones> ;` | No | Única producción. |
 | `<condicion>, NOT/ID/NUM/TRUE/FALSE` | `<condicion> → <comparacion> <condicion_tail>` | No | Única producción por FIRST. |
 | `<condicion_tail>, AND` | `<condicion_tail> → AND <comparacion> <condicion_tail>` | No | Única producción. |
@@ -62,7 +64,7 @@ Inicialmente se detectó un **conflicto FIRST/FIRST** entre `<programa> → <reg
 
 | Celda en conflicto | Producciones en conflicto | FIRST/FOLLOW involucrados | Causa (ambigüedad / falta factorización / recursión izquierda) | Solución aplicada | ¿Resuelto tras corrección? |
 |---|---|---|---|---|---|
-| `<programa>, WHEN` | `<programa> → <regla> <programa>` / `<programa> → <regla>` | $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$, $FOLLOW(\texttt{<programa>}) = \{\$\}$ | Falta factorización / recursión por la derecha mal factorizada | Se aplicó factorización por la izquierda creando `<programa>'` con producciones `<programa>' → <regla> <programa>' \| ε`. Gramática resultante: `<programa> → <regla> <programa>'`. | SÍ |
+| `<programa>, WHEN` | `<programa> → <regla> <programa>` / `<programa> → <regla>` | $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$, $FOLLOW(\texttt{<programa>}) = \{\$\}$ | Falta factorización / recursión por la derecha mal factorizada | Se aplicó factorización por la izquierda creando `<programa'>` con producciones `<programa'> → <regla> <programa'> \| ε`. Gramática resultante: `<programa> → <regla> <programa'>`. | SÍ |
 
 ### Conclusión F10
 La gramática final tras aplicar factorización por la izquierda (eliminando el conflicto FIRST/FIRST en `<programa>`) es **LL(1)**. Todas las celdas de la tabla predictiva tienen 0 o 1 producción. Se ha integrado correctamente la extensión creativa (operador `NOT` y múltiples acciones con `,`) manteniendo la propiedad LL(1). La gramática está lista para ser entregada a Marcelo Matamala para la implementación del parser por descenso recursivo.

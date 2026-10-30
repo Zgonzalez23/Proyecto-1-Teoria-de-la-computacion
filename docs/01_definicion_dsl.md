@@ -51,7 +51,18 @@ Se consideran los siguientes caracteres permitidos:
 | `PUNTO_COMA` | SEPARADOR | `;` |
 | `COMA` | SEPARADOR (Extensión) | `,` |
 | `EOF` | FIN DE ENTRADA | `$` |
-| `ESPACIO` | IGNORAR | `[ \t\n]+` |
+| `ESPACIO` | IGNORAR (no se emite) | `[ \t\n]+` |
+
+### Correspondencia entre notación formal y código
+
+| Notación formal (GLC) | Token / código | Nota |
+|---|---|---|
+| `<programa'>` | `programa_prima` | Python no permite `'` en identificadores |
+| `;` | `PUNTO_COMA` | Separador de regla |
+| `,` | `COMA` | Separador de acciones |
+| `$` | `EOF` | Fin de entrada |
+| `>`, `<`, `>=`, `<=`, `==`, `!=` | `OP_REL` | El lexer los agrupa en un solo tipo |
+| `ε` | `"epsilon"` | Producción vacía en la tabla LL(1) |
 
 ## F3. Ejemplos válidos e inválidos
 

@@ -89,7 +89,7 @@
 
 **Subtareas:**
 - [ ] Identificar **Símbolo inicial** S (ej: `<programa>` o `<reglas>`)
-- [ ] Listar **terminales** (palabras reservadas, ID, NUM, OP_REL, `;`, `,`, `(`, `)`, `TRUE`, `FALSE`, `$`)
+- [ ] Listar **terminales** (palabras reservadas, ID, NUM, OP_REL, `;`, `,`, `TRUE`, `FALSE`, `$`)
 - [ ] Listar **no terminales** (todos los símbolos entre <>)
 - [ ] Escribir **producciones** basadas en ejemplos válidos
 - [ ] **Derivar al menos 1 ejemplo válido** a mano para verificar
@@ -97,17 +97,17 @@
 
 **Sugerencia de estructura inicial (orientativa):**
 ```bnf
-<programa>  → <regla> <programa> | <regla>
-<regla>     → WHEN <condicion> THEN <acciones> ;
-<condicion> → <condicion_logica>
-<condicion_logica> → <comparacion> <condicion_tail>
-<condicion_tail>   → AND <comparacion> <condicion_tail> | OR <comparacion> <condicion_tail> | ε
-<comparacion>      → <factor_cond> <op_rel> <factor_cond> | NOT <condicion>  (considerar para extensión)
-<acciones>         → <accion> <acciones_tail>  (para múltiples acciones)
-<acciones_tail>    → , <accion> <acciones_tail> | ε
-<accion>           → ID
-<factor_cond>      → ID | NUM | TRUE | FALSE
-<op_rel>           → > | < | >= | <= | == | !=
+<programa>        → <regla> <programa'>
+<programa'>       → <regla> <programa'> | ε
+<regla>           → WHEN <condicion> THEN <acciones> ;
+<condicion>       → <comparacion> <condicion_tail>
+<condicion_tail>  → AND <comparacion> <condicion_tail> | OR <comparacion> <condicion_tail> | ε
+<comparacion>     → NOT <comparacion> | <factor_cond> <op_rel> <factor_cond>
+<factor_cond>     → ID | NUM | TRUE | FALSE
+<op_rel>          → > | < | >= | <= | == | !=
+<acciones>        → <accion> <acciones_tail>
+<acciones_tail>   → , <accion> <acciones_tail> | ε
+<accion>          → ID
 ```
 
 **Entregable:** Sección en `docs/02_glc.md` - F4

@@ -23,8 +23,8 @@
 | `<acciones_tail>` | `<acciones_tail> → , <accion> <acciones_tail> \| ε` | Tiene ε y empieza con `,`. | $FIRST(\texttt{<acciones_tail>}) = \{,, \epsilon\}$ |
 | `<acciones>` | `<acciones> → <accion> <acciones_tail>` | Empieza con $FIRST(\texttt{<accion>}) = \{\texttt{ID}\}$, $\epsilon \notin FIRST(\texttt{<accion>})$. | $FIRST(\texttt{<acciones>}) = \{\texttt{ID}\}$ |
 | `<regla>` | `<regla> → WHEN <condicion> THEN <acciones> ;` | Empieza con terminal `WHEN`. | $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$ |
-| `<programa>` | `<programa> → <regla> <programa>'` | Empieza con $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$. | $FIRST(\texttt{<programa>}) = \{\texttt{WHEN}\}$ |
-| `<programa'>` | `<programa>' → <regla> <programa>' \| ε` | Empieza con $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$ y tiene ε. | $FIRST(\texttt{<programa>'}) = \{\texttt{WHEN}, \epsilon\}$ |
+| `<programa>` | `<programa> → <regla> <programa'>` | Empieza con $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$. | $FIRST(\texttt{<programa>}) = \{\texttt{WHEN}\}$ |
+| `<programa'>` | `<programa'> → <regla> <programa'> \| ε` | Empieza con $FIRST(\texttt{<regla>}) = \{\texttt{WHEN}\}$ y tiene ε. | $FIRST(\texttt{<programa'>}) = \{\texttt{WHEN}, \epsilon\}$ |
 
 **Tabla resumen FIRST:**
 ```
@@ -38,7 +38,7 @@ FIRST(<acciones_tail>) = {,, ε}
 FIRST(<acciones>)      = {ID}
 FIRST(<regla>)         = {WHEN}
 FIRST(<programa>)      = {WHEN}
-FIRST(<programa>')     = {WHEN, ε}
+FIRST(<programa'>)     = {WHEN, ε}
 ```
 
 ## F8. Conjuntos FOLLOW
@@ -57,8 +57,8 @@ FIRST(<programa>')     = {WHEN, ε}
 | No Terminal | Aplicación de reglas | FOLLOW(X) |
 |---|---|---|
 | `<programa>` | Regla 1 (símbolo inicial): $FOLLOW(\texttt{<programa>}) = \{\$\}$. | $FOLLOW(\texttt{<programa>}) = \{\$\}$ |
-| `<programa>'` | En `<programa> → <regla> <programa>', `<programa>' está al final, por Regla 3 añadimos $FOLLOW(\texttt{<programa>}) = \{\$\}$. En `<programa>' → <regla> <programa>', `<programa>' está al final, añadimos $FOLLOW(\texttt{<programa>'}) = \{\$\}$. | $FOLLOW(\texttt{<programa>'}) = \{\$\}$ |
-| `<regla>` | En `<programa> → <regla> <programa>', `\beta = <programa>'`. Por Regla 2 añadimos $FIRST(\texttt{<programa>'})\setminus\{\epsilon\} = \{\texttt{WHEN}\}$. Como $\epsilon \in FIRST(\texttt{<programa>'})$ aplicamos Regla 3 y añadimos $FOLLOW(\texttt{<programa>}) = \{\$\}$. Idéntico en `<programa>' → <regla> <programa>'. | $FOLLOW(\texttt{<regla>}) = \{\texttt{WHEN}, \$\}$ |
+| `<programa'>` | En `<programa> → <regla> <programa'>, `<programa'> está al final, por Regla 3 añadimos $FOLLOW(\texttt{<programa>}) = \{\$\}$. En `<programa'> → <regla> <programa'>, `<programa'> está al final, añadimos $FOLLOW(\texttt{<programa'>}) = \{\$\}$. | $FOLLOW(\texttt{<programa'>}) = \{\$\}$ |
+| `<regla>` | En `<programa> → <regla> <programa'>, `\beta = <programa'>`. Por Regla 2 añadimos $FIRST(\texttt{<programa'>})\setminus\{\epsilon\} = \{\texttt{WHEN}\}$. Como $\epsilon \in FIRST(\texttt{<programa'>})$ aplicamos Regla 3 y añadimos $FOLLOW(\texttt{<programa>}) = \{\$\}$. Idéntico en `<programa'> → <regla> <programa'>. | $FOLLOW(\texttt{<regla>}) = \{\texttt{WHEN}, \$\}$ |
 | `<condicion>` | En `<regla> → WHEN <condicion> THEN <acciones> ;`, `\beta = THEN <acciones> ;`, $FIRST(\texttt{THEN}) = \{\texttt{THEN}\}$, añadimos a $FOLLOW(\texttt{<condicion>})$. | $FOLLOW(\texttt{<condicion>}) = \{\texttt{THEN}\}$ |
 | `<condicion_tail>` | En `<condicion> → <comparacion> <condicion_tail>`, `$\beta = \epsilon$`, aplicamos Regla 3: añadimos $FOLLOW(\texttt{<condicion>}) = \{\texttt{THEN}\}$ a $FOLLOW(\texttt{<condicion_tail>})$. En sus propias producciones al final con $\epsilon$ también hereda $FOLLOW(\texttt{<condicion_tail>})$. | $FOLLOW(\texttt{<condicion_tail>}) = \{\texttt{THEN}\}$ |
 | `<comparacion>` | En `<condicion> → <comparacion> <condicion_tail>`, `\beta = <condicion_tail>`. Por Regla 2 añadimos $FIRST(\texttt{<condicion_tail>})\setminus\{\epsilon\} = \{\texttt{AND}, \texttt{OR}\}$. Como $\epsilon \in FIRST(\texttt{<condicion_tail>})$, por Regla 3 añadimos $FOLLOW(\texttt{<condicion>}) = \{\texttt{THEN}\}$. En `<condicion_tail> → AND <comparacion> <condicion_tail>` y `OR <comparacion> <condicion_tail>`, `\beta = <condicion_tail>` aporta los mismos elementos. En `<comparacion> → NOT <comparacion>`, `<comparacion>` al final añade $FOLLOW(\texttt{<comparacion>})$ a sí mismo. | $FOLLOW(\texttt{<comparacion>}) = \{\texttt{THEN}, \texttt{AND}, \texttt{OR}\}$ |
@@ -73,7 +73,7 @@ FIRST(<programa>')     = {WHEN, ε}
 **Tabla resumen FOLLOW:**
 ```
 FOLLOW(<programa>)      = {$}
-FOLLOW(<programa>')     = {$}
+FOLLOW(<programa'>)     = {$}
 FOLLOW(<regla>)         = {WHEN, $}
 FOLLOW(<condicion>)     = {THEN}
 FOLLOW(<condicion_tail>)= {THEN}

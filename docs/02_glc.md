@@ -3,7 +3,7 @@
 ## F4. GLC inicial
 
 - **Símbolo inicial (S):** `<programa>`
-- **No terminales (NT):** `<programa>`, `<regla>`, `<condicion>`, `<condicion_tail>`, `<comparacion>`, `<factor_cond>`, `<op_rel>`, `<acciones>`, `<acciones_tail>`, `<accion>`
+- **No terminales (NT) de la gramática final (tras F6):** `<programa>`, `<programa'>`, `<regla>`, `<condicion>`, `<condicion_tail>`, `<comparacion>`, `<factor_cond>`, `<op_rel>`, `<acciones>`, `<acciones_tail>`, `<accion>`
 - **Terminales (T):** `WHEN`, `THEN`, `AND`, `OR`, `NOT`, `ID`, `NUM`, `TRUE`, `FALSE`, `OP_REL`, `;`, `,`, `$`
 
 ### Producciones iniciales
@@ -64,7 +64,7 @@ La factorización por la izquierda se aplica cuando dos o más alternativas para
 
 | No terminal | Prefijos comunes | Factorización aplicada (antes/después) | Resultado |
 |---|---|---|---|
-| `<programa>` | Prefijo común `<regla>` | **Antes:**<br>`<programa> → <regla> <programa> \| <regla>`<br><br>**Después:**<br>`<programa> → <regla> <programa>'`<br>`<programa'> → <regla> <programa>' \| ε` | Se extrae el prefijo común `<regla>` introduciendo el nuevo no terminal `<programa'>`. Permite análisis predictivo LL(1) determinista. |
+| `<programa>` | Prefijo común `<regla>` | **Antes:**<br>`<programa> → <regla> <programa> \| <regla>`<br><br>**Después:**<br>`<programa> → <regla> <programa'>`<br>`<programa'> → <regla> <programa'> \| ε` | Se extrae el prefijo común `<regla>` introduciendo el nuevo no terminal `<programa'>`. Permite análisis predictivo LL(1) determinista. |
 | `<comparacion>` | Ninguno | Las alternativas son `NOT <comparacion>` y `<factor_cond> <op_rel> <factor_cond>`. Sus primeros símbolos son disjuntos: $FIRST(\text{rama 1}) = \{\texttt{NOT}\}$ y $FIRST(\text{rama 2}) = \{\texttt{ID}, \texttt{NUM}, \texttt{TRUE}, \texttt{FALSE}\}$. | No requiere factorización. Ambas opciones se distinguen inmediatamente con un lookahead de 1 token. |
 | Demás no terminales | Ninguno | `<condicion_tail>` inicia con `AND`, `OR` o $\epsilon$; `<acciones_tail>` inicia con `,` o $\epsilon$. | No presentan prefijos comunes compartidos entre alternativas. |
 
@@ -91,4 +91,4 @@ La factorización por la izquierda se aplica cuando dos o más alternativas para
 ```
 **Símbolo inicial:** `<programa>`
 
-**Observación:** La gramática ha sido factorizada por la izquierda en `<programa>` y se verificó la ausencia de recursión izquierda. Se integra la extensión creativa propuesta por Martín González (Operador NOT y Múltiples Acciones) tal como se especifica en `Tarea T1 Martin Gonzalez.pdf`.
+**Observación:** La gramática ha sido factorizada por la izquierda en `<programa>` y se verificó la ausencia de recursión izquierda. Se integra la extensión creativa propuesta por Martín González (Operador NOT y Múltiples Acciones) tal como se especifica en `Tarea T1 Martin Gonzalez.pdf`. La conciliación entre la propuesta T1 y esta gramática final está en `docs/T1_conciliacion.md`.
