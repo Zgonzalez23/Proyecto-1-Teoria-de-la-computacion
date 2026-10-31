@@ -91,4 +91,4 @@ La factorización por la izquierda se aplica cuando dos o más alternativas para
 ```
 **Símbolo inicial:** `<programa>`
 
-**Observación:** La gramática ha sido factorizada por la izquierda en `<programa>` y se verificó la ausencia de recursión izquierda. Se integra la extensión creativa propuesta por Martín González (Operador NOT y Múltiples Acciones) tal como se especifica en `Tarea T1 Martin Gonzalez.pdf`. La conciliación entre la propuesta T1 y esta gramática final está en `docs/T1_conciliacion.md`.
+**Observación:** La gramática ha sido factorizada por la izquierda en `<programa>` y se verificó la ausencia de recursión izquierda. Se integra la extensión creativa propuesta por Martín González (operadores `NOT` y `OR` y múltiples acciones). La propuesta, ya alineada con esta gramática final, está en `docs/T1.md`.

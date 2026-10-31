@@ -120,4 +120,5 @@ Los archivos de casos JSON contienen una lista de objetos con los campos
 | `docs/02_glc.md` | Gramática libre de contexto, recursión y factorización. |
 | `docs/03_first_follow.md` | Cálculo de los conjuntos FIRST y FOLLOW. |
 | `docs/04_tabla_ll1.md` | Construcción de la tabla predictiva y revisión de conflictos. |
+| `docs/T1.md` | Propuesta de extensión creativa (NOT, OR y múltiples acciones) alineada con la gramática final. |
 | `docs/PLAN_FRANCISCO_BENAVIDES.md` | Documento de planificación del proyecto. |
