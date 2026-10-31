@@ -1,67 +1,123 @@
-# Proyecto-1-Teoria-de-la-computacion
+# SmartHomeLang
 
-DSL **SmartHomeLang** para reglas de automatización de casa inteligente, con análisis
-léxico, parser LL(1) por descenso recursivo, AST y manejo de errores sintácticos.
+Proyecto de Teoría de la Computación que implementa un analizador para
+**SmartHomeLang**, un lenguaje específico de dominio (DSL) para describir reglas
+de automatización de una casa inteligente. El programa tokeniza y valida la
+sintaxis de las reglas mediante un parser LL(1) por descenso recursivo, construye
+un árbol de sintaxis abstracta (AST) y muestra errores léxicos o sintácticos con
+su ubicación.
+
+El proyecto valida programas; no ejecuta acciones ni controla dispositivos.
 
 ## Requisitos
 
 - Python 3.10 o superior.
-- Sin dependencias externas.
+- No requiere dependencias externas.
 
-## Ejecución
+## Inicio rápido
+
+Desde la raíz del proyecto, ejecuta la suite de pruebas:
 
 ```bash
-# Suite completa (25 casos: 20 de casos_prueba.json + 5 de casos_limite.json)
 python3 test_runner.py --casos casos_prueba.json --casos casos_limite.json
-
-# Guardar el reporte en JSON
-python3 test_runner.py --casos casos_prueba.json --casos casos_limite.json \
-  --salida resultados_obtenidos.json
-
-# Mostrar el AST de una entrada
-python3 test_runner.py --ast "WHEN temperatura > 28 THEN encender_ventilador, abrir_ventana;"
 ```
 
-## Estructura
+El runner imprime el resultado de cada caso y guarda un reporte JSON en
+`resultados_obtenidos.json`. Para elegir otra ubicación para el reporte:
 
-| Archivo | Contenido |
-|---|---|
-| `test_runner.py` | Lexer, parser LL(1), AST, errores y runner de pruebas. |
-| `casos_prueba.json` | 10 casos válidos y 10 inválidos. |
-| `casos_limite.json` | 5 casos límite. |
-| `resultados_obtenidos.json` | Reporte de la última ejecución. |
-| `docs/01_definicion_dsl.md` | F1-F3: dominio, tokens y ejemplos. |
-| `docs/02_glc.md` | F4-F6: gramática, recursión y factorización. |
-| `docs/03_first_follow.md` | F7-F8: FIRST y FOLLOW. |
-| `docs/04_tabla_ll1.md` | F9-F10: tabla LL(1) y conflictos. |
-| `docs/T1_conciliacion.md` | Ajuste de la extensión creativa a la gramática final. |
-| `docs/T1_errores_lexicos.md` | Errores léxicos y sintácticos detectados en los ejemplos de la T1. |
+```bash
+python3 test_runner.py \
+  --casos casos_prueba.json \
+  --casos casos_limite.json \
+  --salida reporte.json
+```
 
-## Notación
+La suite incluye 25 casos: 10 válidos y 10 inválidos en `casos_prueba.json`, más
+4 válidos y 1 inválido en `casos_limite.json`.
 
-La gramática usa la notación formal y el código usa identificadores de Python. La
-correspondencia es:
+## Sintaxis del lenguaje
 
-| Formal (GLC) | Token / código |
-|---|---|
-| `<programa'>` | `programa_prima` |
-| `;` | `PUNTO_COMA` |
-| `,` | `COMA` |
-| `$` | `EOF` |
-| `>`, `<`, `>=`, `<=`, `==`, `!=` | `OP_REL` |
-| `ε` | `"epsilon"` |
-
-## Ejemplo
+Un programa contiene una o más reglas. Cada regla empieza con `WHEN`, expresa
+una condición, separa las acciones con `THEN` y termina en punto y coma:
 
 ```text
-WHEN NOT movimiento == TRUE THEN apagar_luces, enviar_notificacion;
+WHEN <condición> THEN <acción>[, <acción>...];
 ```
 
-Tokens principales: `WHEN`, `NOT`, `ID`, `OP_REL`, `TRUE`, `THEN`, `ID`, `COMA`, `ID`,
-`PUNTO_COMA`, `EOF`.
+La condición se construye con comparaciones, `NOT`, y los conectores `AND` y
+`OR`. Una comparación tiene la forma `<factor> <operador-relacional> <factor>`.
+Los factores pueden ser identificadores, números enteros o los literales
+booleanos `TRUE` y `FALSE`.
 
-## Resultado esperado
+Ejemplo con una condición compuesta y varias acciones:
 
 ```text
-RESULTADO FINAL: 25/25 pasados | 0 fallidos
+WHEN NOT movimiento == TRUE AND temperatura < 18
+THEN encender_calefaccion, enviar_notificacion;
 ```
+
+Se permiten varias reglas en una misma entrada:
+
+```text
+WHEN temperatura > 28 THEN encender_ventilador;
+WHEN humedad < 40 THEN activar_humidificador;
+```
+
+### Tokens admitidos
+
+| Elemento | Formato |
+|---|---|
+| Palabras reservadas | `WHEN`, `THEN`, `AND`, `OR`, `NOT`, `TRUE`, `FALSE` |
+| Identificadores | `[A-Za-z_][A-Za-z0-9_]*` |
+| Números | Enteros no negativos, por ejemplo `18` o `28` |
+| Operadores relacionales | `>`, `<`, `>=`, `<=`, `==`, `!=` |
+| Separadores | `,` entre acciones y `;` al final de cada regla |
+| Espacios en blanco | Espacios, tabuladores y saltos de línea; se ignoran |
+
+Las palabras reservadas no distinguen mayúsculas de minúsculas. Los
+identificadores conservan la forma en que fueron escritos y no pueden coincidir
+con una palabra reservada.
+
+## Comandos
+
+Mostrar el AST de una entrada válida:
+
+```bash
+python3 test_runner.py --ast \
+  "WHEN temperatura > 28 THEN encender_ventilador, abrir_ventana;"
+```
+
+El modo `--ast` imprime un mensaje de validación y la estructura jerárquica del
+AST. Si la entrada no es válida, muestra el error y termina con un código de
+salida distinto de cero.
+
+Generar un archivo JSON con los 20 casos predeterminados:
+
+```bash
+python3 test_runner.py --generar-casos --casos casos_generados.json
+```
+
+Consultar todas las opciones:
+
+```bash
+python3 test_runner.py --help
+```
+
+Los archivos de casos JSON contienen una lista de objetos con los campos
+`entrada` y `esperado` (`"valido"` o `"invalido"`); también pueden incluir
+`desc` para describir el caso. Se pueden cargar varios archivos repitiendo
+`--casos`.
+
+## Estructura del proyecto
+
+| Ruta | Descripción |
+|---|---|
+| `test_runner.py` | Lexer, tabla LL(1), parser, construcción e impresión del AST y runner de pruebas. |
+| `casos_prueba.json` | 20 casos: 10 válidos y 10 inválidos. |
+| `casos_limite.json` | 5 casos límite: 4 válidos y 1 inválido. |
+| `resultados_obtenidos.json` | Reporte JSON generado por la última ejecución del runner. |
+| `docs/01_definicion_dsl.md` | Dominio, alfabeto, tokens y ejemplos del DSL. |
+| `docs/02_glc.md` | Gramática libre de contexto, recursión y factorización. |
+| `docs/03_first_follow.md` | Cálculo de los conjuntos FIRST y FOLLOW. |
+| `docs/04_tabla_ll1.md` | Construcción de la tabla predictiva y revisión de conflictos. |
+| `docs/PLAN_FRANCISCO_BENAVIDES.md` | Documento de planificación del proyecto. |
